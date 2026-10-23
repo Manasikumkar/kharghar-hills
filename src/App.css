@@ -1,0 +1,11 @@
+/* Kharghar Hills App Layout Styles */
+.kharghar-hills-landing-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#main-content {
+  flex: 1;
+}
