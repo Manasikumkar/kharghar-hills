@@ -95,8 +95,10 @@ export async function submitEnquiry(payload: EnquiryPayload): Promise<EnquiryRes
     }
   }
 
-  // 2. Production Webhook Execution (if configured in environment)
-  const webhookUrl = import.meta.env.VITE_ENQUIRY_WEBHOOK_URL
+  // 2. Production Webhook Execution
+  const webhookUrl =
+    (import.meta.env.VITE_ENQUIRY_WEBHOOK_URL as string | undefined) ||
+    'https://automate.nirosha.org/webhook/khargharhillsin'
   const apiKey = import.meta.env.VITE_ENQUIRY_API_KEY
 
   if (webhookUrl && typeof webhookUrl === 'string' && webhookUrl.startsWith('https://')) {
@@ -112,10 +114,15 @@ export async function submitEnquiry(payload: EnquiryPayload): Promise<EnquiryRes
         method: 'POST',
         headers,
         body: JSON.stringify({
-          ...payload,
+          name: payload.name,
+          phone: payload.phone,
+          interestedIn: payload.interestedIn,
+          agreed: payload.agreed,
+          source: payload.source || 'Website Lead',
+          project: 'Kharghar Hills, Navi Mumbai',
           referenceId,
           timestamp,
-          project: 'Kharghar Hills, Navi Mumbai',
+          pageUrl: typeof window !== 'undefined' ? window.location.href : '',
         }),
       })
 
