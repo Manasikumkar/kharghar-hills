@@ -7,12 +7,14 @@ export const KhargharLogo: React.FC<{
   layout?: 'horizontal' | 'vertical'
   glyphSize?: number
   showTagline?: boolean
+  fontSizeScale?: number
 }> = ({
   className = '',
   variant = 'dark',
   layout = 'vertical',
   glyphSize,
   showTagline = false,
+  fontSizeScale = 1,
 }) => {
   const isDark = variant === 'dark'
   const primaryColor = isDark ? '#103323' : '#FFFFFF'
@@ -68,7 +70,7 @@ export const KhargharLogo: React.FC<{
           className="brand-logo-text-large"
           style={{
             fontFamily: 'var(--font-brand-serif)',
-            fontSize: isHorizontal ? '1.35rem' : '1.45rem',
+            fontSize: isHorizontal ? `${1.35 * fontSizeScale}rem` : `${1.45 * fontSizeScale}rem`,
             fontWeight: 700,
             letterSpacing: '0.03em',
             color: primaryColor,
@@ -81,7 +83,7 @@ export const KhargharLogo: React.FC<{
           className="brand-logo-text-small"
           style={{
             fontFamily: 'var(--font-brand-serif)',
-            fontSize: isHorizontal ? '1.02rem' : '1.1rem',
+            fontSize: isHorizontal ? `${1.02 * fontSizeScale}rem` : `${1.1 * fontSizeScale}rem`,
             fontWeight: 500,
             letterSpacing: '0.04em',
             color: primaryColor,

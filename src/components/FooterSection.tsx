@@ -52,79 +52,83 @@ export const FooterSection: React.FC = () => {
       aria-label="Kharghar Hills Footer"
     >
       <div className="container">
-        {/* ─── Top Brand & Value Strip ─── */}
-        <div className="footer-brand-strip">
-          <KhargharLogo layout="horizontal" glyphSize={36} />
-          <div className="footer-brand-text">
-            <span className="footer-tagline">30-Acre Hillside Residential Township</span>
-            <span className="footer-price-tag">1 &amp; 2 BHK Homes from ₹54.99 Lacs+ • Advance Bookings Open</span>
+        {/* ─── Top Brand & Navigation Row ─── */}
+        <div className="footer-top-row">
+          <div className="footer-brand-block">
+            <KhargharLogo layout="horizontal" glyphSize={38} />
           </div>
+
+          <nav className="footer-nav-menu" aria-label="Footer Navigation">
+            <a href="#hero">Overview</a>
+            <span className="footer-dot" aria-hidden="true">•</span>
+            <a href="#promotional-video">Film</a>
+            <span className="footer-dot" aria-hidden="true">•</span>
+            <a href="#infrastructure">Infrastructure</a>
+            <span className="footer-dot" aria-hidden="true">•</span>
+            <a href="#lifestyle">Lifestyle</a>
+            <span className="footer-dot" aria-hidden="true">•</span>
+            <a href="#location">Location</a>
+            <span className="footer-dot" aria-hidden="true">•</span>
+            <a href="#pricing">Pricing</a>
+            <span className="footer-dot" aria-hidden="true">•</span>
+            <a href="#enquiry">Schedule Visit</a>
+          </nav>
         </div>
 
-        {/* ─── Clean Navigation Links ─── */}
-        <nav className="footer-nav-strip" aria-label="Footer Navigation">
-          <a href="#hero">Overview</a>
-          <span className="footer-nav-dot" aria-hidden="true">•</span>
-          <a href="#promotional-video">Project Film</a>
-          <span className="footer-nav-dot" aria-hidden="true">•</span>
-          <a href="#infrastructure">Infrastructure</a>
-          <span className="footer-nav-dot" aria-hidden="true">•</span>
-          <a href="#lifestyle">Lifestyle</a>
-          <span className="footer-nav-dot" aria-hidden="true">•</span>
-          <a href="#location">Location</a>
-          <span className="footer-nav-dot" aria-hidden="true">•</span>
-          <a href="#pricing">Pricing</a>
-          <span className="footer-nav-dot" aria-hidden="true">•</span>
-          <a href="#enquiry">Schedule Visit</a>
-        </nav>
-
-        {/* ─── Developer & MahaRERA Strip ─── */}
-        <div className="footer-partners-strip">
-          <div className="footer-partner-col">
-            <span className="partners-label">DEVELOPED BY</span>
-            <div className="partner-logo-item">
-              <TodayGroupLogo height={38} />
-            </div>
-          </div>
-
-          <div className="footer-partner-col">
-            <span className="partners-label">PRESENTED BY</span>
-            <div className="partner-logo-item">
-              <PracharDevelopersLogo height={38} />
-            </div>
-          </div>
-
-          <div className="maharera-simple-box">
+        {/* ─── Unified Trust & MahaRERA Credentials Card ─── */}
+        <div className="footer-trust-card">
+          {/* Left: MahaRERA Registered */}
+          <div className="trust-item trust-item-rera">
             <div className="maharera-qr-wrap">
               <img
                 src="/assets/maharera_qr.png"
                 alt="MahaRERA Registration QR"
                 className="maharera-qr-img"
-                width="64"
-                height="64"
+                width="54"
+                height="54"
               />
             </div>
-            <div className="maharera-info">
+            <div className="maharera-text-group">
               <span className="maharera-label">MahaRERA Registered</span>
-              <strong className="maharera-number">P51800055726</strong>
+              <strong className="maharera-reg-num">P51800055726</strong>
               <a
                 href="https://maharera.maharashtra.gov.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="maharera-link"
+                className="maharera-portal-link"
               >
                 <span>maharera.maharashtra.gov.in</span>
                 <ExternalLink size={11} />
               </a>
             </div>
           </div>
+
+          <div className="trust-divider" aria-hidden="true" />
+
+          {/* Center: PRESENTED BY Prachar Developers */}
+          <div className="trust-item trust-item-promoter">
+            <span className="trust-label">PRESENTED BY</span>
+            <div className="trust-logo-box">
+              <PracharDevelopersLogo height={38} />
+            </div>
+          </div>
+
+          <div className="trust-divider" aria-hidden="true" />
+
+          {/* Right: DEVELOPED BY Today Group */}
+          <div className="trust-item trust-item-developer">
+            <span className="trust-label">DEVELOPED BY</span>
+            <div className="trust-logo-box">
+              <TodayGroupLogo height={38} />
+            </div>
+          </div>
         </div>
 
         {/* ─── Concise Legal Disclaimer ─── */}
-        <div className="footer-disclaimer-wrap">
+        <div className="footer-disclaimer-card">
           <p className="disclaimer-text">
             <strong>Disclaimer:</strong> Artistic impressions, specifications, and project details are
-            for representation purposes only. *₹54.99 Lacs+ reflects the advertised starting price from
+            for representation purposes only. *₹54.99 Lacs+ reflects advertised starting prices from
             promotional materials. Taxes, floor-rise, statutory charges, and availability are subject to
             confirmation upon formal booking. Official details available on MahaRERA portal under
             registration P51800055726.
@@ -154,147 +158,127 @@ export const FooterSection: React.FC = () => {
         .simple-footer {
           background-color: #FFFFFF;
           color: #1D2622;
-          padding-top: clamp(3rem, 5vw, 4.25rem);
-          padding-bottom: clamp(1.75rem, 3vw, 2.5rem);
+          padding-top: clamp(2.25rem, 4vw, 3rem);
+          padding-bottom: clamp(1.25rem, 2.5vw, 2rem);
           border-top: 1px solid #ECE7D9;
         }
 
-        /* Brand Strip */
-        .footer-brand-strip {
+        /* ── Top Row: Brand & Navigation ── */
+        .footer-top-row {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          text-align: center;
-          gap: 0.85rem;
-          margin-bottom: 2rem;
+          gap: 1.25rem;
+          margin-bottom: 1.5rem;
         }
 
-        @media (min-width: 768px) {
-          .footer-brand-strip {
+        @media (min-width: 960px) {
+          .footer-top-row {
             flex-direction: row;
+            align-items: center;
             justify-content: space-between;
-            text-align: left;
+            gap: 2rem;
           }
         }
 
-        .footer-brand-text {
+        .footer-brand-block {
           display: flex;
-          flex-direction: column;
-          gap: 0.2rem;
+          align-items: center;
         }
 
-        .footer-tagline {
-          font-family: var(--font-heading);
-          font-size: 0.82rem;
-          font-weight: 700;
-          color: var(--color-forest);
-          letter-spacing: 0.04em;
-        }
-
-        .footer-price-tag {
-          font-size: 0.78rem;
-          color: var(--color-text-muted);
-        }
-
-        /* Navigation Strip */
-        .footer-nav-strip {
+        .footer-nav-menu {
           display: flex;
           flex-wrap: wrap;
           align-items: center;
-          justify-content: center;
-          gap: 0.75rem 1rem;
-          padding: 1.1rem 0;
-          margin-bottom: 2rem;
-          border-top: 1px solid #F0ECE1;
-          border-bottom: 1px solid #F0ECE1;
+          gap: 0.5rem 0.85rem;
         }
 
-        .footer-nav-strip a {
+        .footer-nav-menu a {
           font-family: var(--font-heading);
-          font-size: 0.84rem;
+          font-size: 0.82rem;
           font-weight: 600;
           color: var(--color-forest);
           transition: color var(--transition-fast);
         }
 
-        .footer-nav-strip a:hover {
+        .footer-nav-menu a:hover {
           color: var(--color-coral);
         }
 
-        .footer-nav-dot {
-          color: rgba(16, 51, 35, 0.2);
-          font-size: 0.8rem;
+        .footer-dot {
+          color: rgba(16, 51, 35, 0.22);
+          font-size: 0.75rem;
         }
 
-        /* Partners & MahaRERA Strip */
-        .footer-partners-strip {
+        /* ── Middle Row: Unified Trust & Credentials Card ── */
+        .footer-trust-card {
           display: grid;
           grid-template-columns: 1fr;
-          align-items: center;
-          gap: 1.5rem;
-          padding: 1.25rem 1.6rem;
+          gap: 1.25rem;
+          padding: 1.15rem 1.65rem;
           background: #FAFAF7;
-          border-radius: var(--radius-lg);
+          border-radius: var(--radius-md);
           border: 1px solid #ECE7D8;
-          margin-bottom: 1.75rem;
-          text-align: center;
+          margin-bottom: 1.25rem;
+          align-items: center;
         }
 
-        @media (min-width: 768px) {
-          .footer-partners-strip {
-            grid-template-columns: 1.05fr 1.05fr 1.35fr;
-            align-items: center;
-            text-align: left;
-            gap: 1.75rem;
+        @media (min-width: 860px) {
+          .footer-trust-card {
+            grid-template-columns: 1.35fr auto 1fr auto 1fr;
+            gap: 1.5rem;
           }
         }
 
-        .footer-partner-col {
+        .trust-item {
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
-          align-items: center;
+          gap: 0.45rem;
         }
 
-        @media (min-width: 768px) {
-          .footer-partner-col {
-            align-items: flex-start;
-          }
-        }
-
-        .partners-label {
+        .trust-label {
           font-family: var(--font-heading);
-          font-size: 0.65rem;
+          font-size: 0.64rem;
           font-weight: 700;
           letter-spacing: 0.12em;
           color: var(--color-text-muted);
+          text-transform: uppercase;
         }
 
-        .partner-logo-item {
+        .trust-logo-box {
           display: flex;
           align-items: center;
-          height: 42px;
+          height: 40px;
         }
 
-        /* MahaRERA Box */
-        .maharera-simple-box {
+        .trust-divider {
+          display: none;
+          width: 1px;
+          height: 52px;
+          background-color: #E6E1D2;
+        }
+
+        @media (min-width: 860px) {
+          .trust-divider {
+            display: block;
+          }
+        }
+
+        .trust-item-rera {
           display: flex;
+          flex-direction: row;
           align-items: center;
-          gap: 0.9rem;
-          padding: 0.65rem 1rem;
-          background: #FFFFFF;
-          border-radius: var(--radius-md);
-          border: 1px solid #E4E0D2;
+          gap: 0.95rem;
         }
 
         .maharera-qr-wrap {
-          width: 48px;
-          height: 48px;
+          width: 52px;
+          height: 52px;
           flex-shrink: 0;
           border: 1px solid #ECE7D9;
-          border-radius: 4px;
-          padding: 2px;
+          border-radius: 6px;
+          padding: 3px;
           background: #FFFFFF;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
         }
 
         .maharera-qr-img {
@@ -304,28 +288,29 @@ export const FooterSection: React.FC = () => {
           display: block;
         }
 
-        .maharera-info {
+        .maharera-text-group {
           display: flex;
           flex-direction: column;
-          gap: 0.1rem;
+          gap: 0.15rem;
         }
 
         .maharera-label {
           font-size: 0.64rem;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.08em;
           color: var(--color-text-muted);
           font-weight: 600;
         }
 
-        .maharera-number {
+        .maharera-reg-num {
           font-family: var(--font-heading);
-          font-size: 0.92rem;
+          font-size: 0.95rem;
           font-weight: 800;
           color: var(--color-forest);
+          letter-spacing: 0.02em;
         }
 
-        .maharera-link {
+        .maharera-portal-link {
           display: inline-flex;
           align-items: center;
           gap: 0.25rem;
@@ -333,12 +318,17 @@ export const FooterSection: React.FC = () => {
           color: var(--color-coral);
           font-weight: 600;
           text-decoration: underline;
+          transition: opacity 0.2s ease;
         }
 
-        /* Disclaimer */
-        .footer-disclaimer-wrap {
-          margin-bottom: 1.5rem;
-          padding: 1rem 1.25rem;
+        .maharera-portal-link:hover {
+          opacity: 0.85;
+        }
+
+        /* ── Lower Row: Disclaimer ── */
+        .footer-disclaimer-card {
+          margin-bottom: 1.15rem;
+          padding: 0.85rem 1.15rem;
           background: #FDFCF9;
           border-radius: var(--radius-sm);
           border: 1px solid #ECE7D8;
@@ -354,14 +344,14 @@ export const FooterSection: React.FC = () => {
           color: var(--color-forest);
         }
 
-        /* Bottom Bar */
+        /* ── Bottom Bar ── */
         .footer-bottom-bar {
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: space-between;
-          gap: 0.85rem;
-          padding-top: 1.25rem;
+          gap: 0.75rem;
+          padding-top: 1rem;
           border-top: 1px solid #ECE7D8;
         }
 
@@ -389,7 +379,7 @@ export const FooterSection: React.FC = () => {
           background: #FFFFFF;
           color: var(--color-forest);
           font-family: var(--font-heading);
-          font-size: 0.76rem;
+          font-size: 0.75rem;
           font-weight: 700;
           transition: all var(--transition-fast);
         }

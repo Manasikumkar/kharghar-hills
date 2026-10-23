@@ -1,5 +1,5 @@
 import React from 'react'
-import { Phone, MessageSquare, Calendar } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 
 interface FloatingContactBarProps {
   onOpenModal: () => void
@@ -7,32 +7,8 @@ interface FloatingContactBarProps {
 
 export const FloatingContactBar: React.FC<FloatingContactBarProps> = ({ onOpenModal }) => {
   return (
-    <aside className="floating-bar-wrap" aria-label="Quick contact and booking options">
+    <aside className="floating-bar-wrap" aria-label="Quick booking option">
       <div className="floating-bar">
-        <a
-          href="tel:+918045683700"
-          className="floating-btn phone-btn"
-          aria-label="Call property sales team"
-        >
-          <Phone size={17} />
-          <span>Call Sales</span>
-        </a>
-
-        <div className="floating-divider" />
-
-        <a
-          href="https://wa.me/918045683700?text=Hi,%20I%20am%20interested%20in%20Kharghar%20Hills%201%20and%202%20BHK%20homes"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="floating-btn whatsapp-btn"
-          aria-label="Chat on WhatsApp"
-        >
-          <MessageSquare size={17} />
-          <span>WhatsApp</span>
-        </a>
-
-        <div className="floating-divider" />
-
         <button
           type="button"
           onClick={onOpenModal}
@@ -40,7 +16,7 @@ export const FloatingContactBar: React.FC<FloatingContactBarProps> = ({ onOpenMo
           aria-label="Open booking enquiry form"
         >
           <Calendar size={17} />
-          <span>Enquire</span>
+          <span>Enquire Now &bull; Schedule Visit</span>
         </button>
       </div>
 
@@ -55,7 +31,7 @@ export const FloatingContactBar: React.FC<FloatingContactBarProps> = ({ onOpenMo
           align-items: center;
           justify-content: center;
           width: calc(100% - 2.5rem);
-          max-width: 440px;
+          max-width: 340px;
           pointer-events: none;
         }
 
@@ -66,10 +42,9 @@ export const FloatingContactBar: React.FC<FloatingContactBarProps> = ({ onOpenMo
           -webkit-backdrop-filter: blur(16px);
           border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: var(--radius-pill);
-          padding: 0.45rem 0.65rem;
+          padding: 0.35rem;
           display: flex;
           align-items: center;
-          justify-content: space-between;
           width: 100%;
           box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
         }
@@ -79,27 +54,15 @@ export const FloatingContactBar: React.FC<FloatingContactBarProps> = ({ onOpenMo
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 0.4rem;
+          gap: 0.5rem;
           font-family: var(--font-heading);
-          font-size: 0.8rem;
+          font-size: 0.86rem;
           font-weight: 700;
-          padding: 0.6rem 0.5rem;
+          padding: 0.75rem 1rem;
           border-radius: var(--radius-pill);
           color: #FFFFFF;
           transition: background-color 0.2s ease, transform 0.2s ease;
           text-decoration: none;
-        }
-
-        .phone-btn:hover {
-          background-color: rgba(255, 255, 255, 0.12);
-        }
-
-        .whatsapp-btn {
-          color: #25D366;
-        }
-
-        .whatsapp-btn:hover {
-          background-color: rgba(37, 211, 102, 0.15);
         }
 
         .book-btn {
@@ -112,12 +75,6 @@ export const FloatingContactBar: React.FC<FloatingContactBarProps> = ({ onOpenMo
           background-color: var(--color-coral-hover);
         }
 
-        .floating-divider {
-          width: 1px;
-          height: 22px;
-          background: rgba(255, 255, 255, 0.18);
-        }
-
         @media (min-width: 900px) {
           .floating-bar-wrap {
             display: none;
@@ -127,3 +84,4 @@ export const FloatingContactBar: React.FC<FloatingContactBarProps> = ({ onOpenMo
     </aside>
   )
 }
+

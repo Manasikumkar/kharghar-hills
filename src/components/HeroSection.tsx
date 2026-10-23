@@ -375,7 +375,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
             <div ref={archFrameRef} className="hero-arch-frame">
               {/* Top Brand Logo inside Arch */}
               <div className="hero-arch-logo">
-                <KhargharLogo variant="dark" />
+                <KhargharLogo variant="dark" glyphSize={58} fontSizeScale={1.38} />
               </div>
 
               {/* Landscape Image with parallax within frame */}
@@ -690,8 +690,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
         }
 
         .hero-arch-logo {
-          padding-top: 3rem;
-          padding-bottom: 2rem;
+          padding-top: 2.75rem;
+          padding-bottom: 1.85rem;
           display: flex;
           justify-content: center;
           align-items: center;

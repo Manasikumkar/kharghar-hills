@@ -36,7 +36,7 @@ const infraData: InfraItem[] = [
     tag: 'Commercial Hub',
     baseAngle: -90, // Top (12 o'clock)
     labelAlign: 'center',
-    labelOffset: { x: 380, y: 50 },
+    labelOffset: { x: 380, y: 40 },
   },
   {
     id: 2,
@@ -148,58 +148,48 @@ export const InfrastructureSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null)
   const wheelRef = useRef<SVGGElement | null>(null)
   const continuousTweenRef = useRef<gsap.core.Tween | null>(null)
-  const uprightTweenRef = useRef<gsap.core.Tween | null>(null)
-  const transitionTweenRef = useRef<gsap.core.Tween | null>(null)
   const resumeTimeoutRef = useRef<number | null>(null)
 
-  const isRotatingRef = useRef<boolean>(true)
-  const isHoveredRef = useRef<boolean>(false)
   const isVisibleRef = useRef<boolean>(true)
   const prefersReducedMotionRef = useRef<boolean>(false)
 
-  // Keep refs in sync with state
-  useEffect(() => {
-    isRotatingRef.current = isRotating
-  }, [isRotating])
+  // Counter-rotation updater: sets native SVG transform="rotate(-angle)" on local (0,0)
+  // This guarantees 100% precision with ZERO off-center wobble
+  const updateCounterRotation = (angle: number) => {
+    const rotStr = `rotate(${-angle})`
+    document.querySelectorAll<SVGGElement>('.counter-rotate-node').forEach((node) => {
+      node.setAttribute('transform', rotStr)
+    })
+  }
 
-  useEffect(() => {
-    isHoveredRef.current = isHovered
-  }, [isHovered])
-
-  // Continuous linear rotation launcher using GSAP
+  // Smooth continuous rotation launcher
   const startContinuousSpin = useCallback((fromAngle = 0) => {
     if (!wheelRef.current || prefersReducedMotionRef.current) return
 
     continuousTweenRef.current?.kill()
-    uprightTweenRef.current?.kill()
 
     gsap.set(wheelRef.current, { rotation: fromAngle, svgOrigin: `${CX} ${CY}` })
-    gsap.set('.upright-node', { rotation: -fromAngle, transformOrigin: '0 0' })
+    updateCounterRotation(fromAngle)
 
-    // 30 seconds for one full 360-degree rotation (elegant, smooth linear motion)
+    // Smooth, luxurious 35-second continuous revolution
     continuousTweenRef.current = gsap.to(wheelRef.current, {
       rotation: '+=360',
-      duration: 30,
+      duration: 35,
       ease: 'none',
       repeat: -1,
       svgOrigin: `${CX} ${CY}`,
-    })
-
-    // Exact counter-rotation keeps all 7 number badges and icons upright at all times
-    uprightTweenRef.current = gsap.to('.upright-node', {
-      rotation: '-=360',
-      duration: 30,
-      ease: 'none',
-      repeat: -1,
-      transformOrigin: '0 0',
+      onUpdate: () => {
+        if (!wheelRef.current) return
+        const cur = Number(gsap.getProperty(wheelRef.current, 'rotation')) || 0
+        updateCounterRotation(cur)
+      },
     })
   }, [])
 
-  // Step transition handler: smoothly aligns the wheel, updates info card, and holds
+  // Step transition handler: aligns wheel, updates spotlight card, and holds before resuming
   const goToStep = useCallback(
     (newIndex: number) => {
       if (newIndex === activeIndex) return
-
       setDirection(newIndex > activeIndex ? 'forward' : 'backward')
       setActiveIndex(newIndex)
 
@@ -208,20 +198,15 @@ export const InfrastructureSection: React.FC = () => {
         resumeTimeoutRef.current = null
       }
 
-      if (prefersReducedMotionRef.current) return
+      if (prefersReducedMotionRef.current || !wheelRef.current) return
 
-      // Pause continuous spin during selection
+      // Pause continuous spin while user inspects clicked step
       continuousTweenRef.current?.pause()
-      uprightTweenRef.current?.pause()
-
-      if (!wheelRef.current) return
 
       const currentRot = Number(gsap.getProperty(wheelRef.current, 'rotation')) || 0
-      // Calculate nearest aligned station (multiple of 360 brings segments to their designated station)
       const targetRot = Math.round(currentRot / 360) * 360
 
-      transitionTweenRef.current?.kill()
-      transitionTweenRef.current = gsap.to(wheelRef.current, {
+      gsap.to(wheelRef.current, {
         rotation: targetRot,
         duration: 0.75,
         ease: 'power2.out',
@@ -229,13 +214,12 @@ export const InfrastructureSection: React.FC = () => {
         onUpdate: () => {
           if (!wheelRef.current) return
           const cur = Number(gsap.getProperty(wheelRef.current, 'rotation')) || 0
-          gsap.set('.upright-node', { rotation: -cur, transformOrigin: '0 0' })
+          updateCounterRotation(cur)
         },
         onComplete: () => {
-          // If rotation is enabled and user is not hovering, resume rotation after 3.5s hold
-          if (isRotatingRef.current && !isHoveredRef.current) {
+          if (isRotating && !isHovered) {
             resumeTimeoutRef.current = window.setTimeout(() => {
-              if (isRotatingRef.current && !isHoveredRef.current) {
+              if (isRotating && !isHovered) {
                 startContinuousSpin(targetRot)
               }
             }, 3500)
@@ -243,7 +227,7 @@ export const InfrastructureSection: React.FC = () => {
         },
       })
     },
-    [activeIndex, startContinuousSpin]
+    [activeIndex, isRotating, isHovered, startContinuousSpin]
   )
 
   const handleNext = useCallback(() => {
@@ -256,34 +240,22 @@ export const InfrastructureSection: React.FC = () => {
 
   // Toggle Continuous Rotation
   const toggleRotation = useCallback(() => {
-    const nextVal = !isRotating
-    setIsRotating(nextVal)
-    isRotatingRef.current = nextVal
-
-    if (resumeTimeoutRef.current) {
-      window.clearTimeout(resumeTimeoutRef.current)
-      resumeTimeoutRef.current = null
-    }
-
-    if (!nextVal) {
-      continuousTweenRef.current?.pause()
-      uprightTweenRef.current?.pause()
-    } else {
-      if (wheelRef.current) {
+    setIsRotating((prev) => {
+      const next = !prev
+      if (!next) {
+        continuousTweenRef.current?.pause()
+      } else if (wheelRef.current) {
         const currentRot = Number(gsap.getProperty(wheelRef.current, 'rotation')) || 0
         startContinuousSpin(currentRot)
       }
-    }
-  }, [isRotating, startContinuousSpin])
+      return next
+    })
+  }, [startContinuousSpin])
 
   // Hover handlers: pause rotation on hover so user can easily read/click
   const handleMouseEnter = () => {
     setIsHovered(true)
-    isHoveredRef.current = true
-    if (isRotatingRef.current) {
-      continuousTweenRef.current?.pause()
-      uprightTweenRef.current?.pause()
-    }
+    continuousTweenRef.current?.pause()
     if (resumeTimeoutRef.current) {
       window.clearTimeout(resumeTimeoutRef.current)
       resumeTimeoutRef.current = null
@@ -292,8 +264,7 @@ export const InfrastructureSection: React.FC = () => {
 
   const handleMouseLeave = () => {
     setIsHovered(false)
-    isHoveredRef.current = false
-    if (isRotatingRef.current && wheelRef.current) {
+    if (isRotating && wheelRef.current) {
       const currentRot = Number(gsap.getProperty(wheelRef.current, 'rotation')) || 0
       startContinuousSpin(currentRot)
     }
@@ -310,7 +281,7 @@ export const InfrastructureSection: React.FC = () => {
     }
   }
 
-  // Initialize continuous rotation on mount
+  // Start continuous spinning on mount
   useEffect(() => {
     prefersReducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (!prefersReducedMotionRef.current) {
@@ -319,8 +290,6 @@ export const InfrastructureSection: React.FC = () => {
 
     return () => {
       continuousTweenRef.current?.kill()
-      uprightTweenRef.current?.kill()
-      transitionTweenRef.current?.kill()
       if (resumeTimeoutRef.current) window.clearTimeout(resumeTimeoutRef.current)
     }
   }, [startContinuousSpin])
@@ -335,10 +304,8 @@ export const InfrastructureSection: React.FC = () => {
         isVisibleRef.current = entry.isIntersecting
         if (!entry.isIntersecting) {
           continuousTweenRef.current?.pause()
-          uprightTweenRef.current?.pause()
-        } else if (isRotatingRef.current && !isHoveredRef.current) {
+        } else if (isRotating && !isHovered) {
           continuousTweenRef.current?.resume()
-          uprightTweenRef.current?.resume()
         }
       },
       { threshold: 0.15 }
@@ -346,7 +313,7 @@ export const InfrastructureSection: React.FC = () => {
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [])
+  }, [isRotating, isHovered])
 
   // GSAP ScrollTrigger for section entrance & background parallax
   useEffect(() => {
@@ -631,34 +598,33 @@ export const InfrastructureSection: React.FC = () => {
 
                 {/* CONTINUOUS ROTATING ORBITAL WHEEL GROUP (Rotates around CX, CY) */}
                 <g ref={wheelRef} className="rotating-wheel-group">
-                  {/* Decorative Outer Dashed Orbit Guide Rings */}
+                  {/* Decorative Outer Dashed Orbit Guide Rings with ample badge clearance */}
                   <circle
                     cx={CX}
                     cy={CY}
-                    r="238"
-                    stroke="rgba(72, 224, 140, 0.22)"
-                    strokeWidth="1.5"
-                    strokeDasharray="8 10"
-                    fill="none"
-                  />
-                  <circle cx={CX + 238} cy={CY} r="4" fill="#48E08C" filter="url(#active-mint-glow)" />
-                  <circle cx={CX - 238} cy={CY} r="3" fill="#48E08C" />
-                  <circle cx={CX} cy={CY + 238} r="3" fill="rgba(72, 224, 140, 0.6)" />
-                  <circle cx={CX} cy={CY - 238} r="3" fill="rgba(72, 224, 140, 0.6)" />
-
-                  <circle
-                    cx={CX}
-                    cy={CY}
-                    r="262"
-                    stroke="rgba(215, 243, 227, 0.10)"
+                    r="252"
+                    stroke="rgba(72, 224, 140, 0.20)"
                     strokeWidth="1.2"
-                    strokeDasharray="4 8"
+                    strokeDasharray="6 8"
                     fill="none"
                   />
-                  <circle cx={CX + 262} cy={CY} r="2.5" fill="#FFFFFF" />
-                  <circle cx={CX - 262} cy={CY} r="2.5" fill="#FFFFFF" />
+                  <circle cx={CX + 252} cy={CY} r="3.5" fill="#48E08C" filter="url(#active-mint-glow)" />
+                  <circle cx={CX - 252} cy={CY} r="3" fill="#48E08C" />
+                  <circle cx={CX} cy={CY + 252} r="3" fill="rgba(72, 224, 140, 0.6)" />
 
-                  {/* Focused Active Sweep Wedge for the selected petal (without outer square outline) */}
+                  <circle
+                    cx={CX}
+                    cy={CY}
+                    r="270"
+                    stroke="rgba(215, 243, 227, 0.08)"
+                    strokeWidth="1"
+                    strokeDasharray="3 6"
+                    fill="none"
+                  />
+                  <circle cx={CX + 270} cy={CY} r="2" fill="#FFFFFF" />
+                  <circle cx={CX - 270} cy={CY} r="2" fill="#FFFFFF" />
+
+                  {/* Focused Active Sweep Wedge for the selected petal */}
                   <g
                     transform={`rotate(${activeItem.baseAngle} ${CX} ${CY})`}
                     style={{
@@ -737,9 +703,9 @@ export const InfrastructureSection: React.FC = () => {
                             style={{ outline: 'none' }}
                           />
 
-                          {/* Upright Icon Node (counter-rotates so icon is always upright) */}
+                          {/* Station Icon Node */}
                           <g transform={`translate(${iconPos.x}, ${iconPos.y})`}>
-                            <g className="upright-node" style={{ transformOrigin: '0 0', outline: 'none' }}>
+                            <g className="counter-rotate-node">
                               <foreignObject
                                 x={-15}
                                 y={-15}
@@ -768,9 +734,9 @@ export const InfrastructureSection: React.FC = () => {
                             </g>
                           </g>
 
-                          {/* Upright Number Badge on Outer Rim (counter-rotates so number is always upright) */}
+                          {/* Station Number Badge on Outer Rim */}
                           <g transform={`translate(${badgePos.x}, ${badgePos.y})`}>
-                            <g className="upright-node" style={{ transformOrigin: '0 0', outline: 'none' }}>
+                            <g className="counter-rotate-node">
                               {isActive && (
                                 <circle
                                   r={21}
@@ -781,7 +747,7 @@ export const InfrastructureSection: React.FC = () => {
                                 />
                               )}
                               <circle
-                                r={15}
+                                r={15.5}
                                 fill={isActive ? '#3DAA73' : '#FFFFFF'}
                                 stroke={isActive ? '#FFFFFF' : '#B8D8C3'}
                                 strokeWidth={isActive ? 2.4 : 1.5}
@@ -790,8 +756,9 @@ export const InfrastructureSection: React.FC = () => {
                               <text
                                 textAnchor="middle"
                                 dominantBaseline="central"
+                                y="0.5"
                                 fill={isActive ? '#FFFFFF' : '#103323'}
-                                fontSize="12.5"
+                                fontSize="13"
                                 fontWeight="800"
                                 fontFamily="var(--font-heading)"
                               >
@@ -1270,11 +1237,18 @@ export const InfrastructureSection: React.FC = () => {
           font-family: var(--font-heading);
           font-size: 0.82rem;
           font-weight: 700;
+          line-height: 1;
+          padding: 0;
           color: rgba(255, 255, 255, 0.75);
           background: rgba(255, 255, 255, 0.08);
           border: 1px solid rgba(255, 255, 255, 0.16);
           transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
           cursor: pointer;
+        }
+
+        .step-num-btn span {
+          display: block;
+          line-height: 1;
         }
 
         .step-num-btn:hover {

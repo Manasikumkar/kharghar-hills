@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { X, ArrowRight, Check, Phone, ShieldCheck, Loader2, Info } from 'lucide-react'
+import { X, ArrowRight, Check, ShieldCheck, Loader2, Info } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { submitEnquiry, type EnquiryResult } from '../services/enquiryAdapter'
 
@@ -131,12 +131,7 @@ export const EnquiryModal: React.FC<EnquiryModalProps> = ({
               <span>{submissionResult.message}</span>
             </div>
 
-            <div className="modal-direct-call" style={{ marginTop: '1.25rem' }}>
-              <a href="tel:+918045683700" className="btn-forest" style={{ width: '100%', gap: '0.5rem' }}>
-                <Phone size={16} />
-                <span>Call Sales Desk Directly: +91 80 4568 3700</span>
-              </a>
-            </div>
+
             <button
               type="button"
               onClick={onClose}

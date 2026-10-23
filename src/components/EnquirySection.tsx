@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ArrowRight, Check, Phone, MessageSquare, Loader2, Info } from 'lucide-react'
+import { ArrowRight, Check, Loader2, Info } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { submitEnquiry, type EnquiryResult } from '../services/enquiryAdapter'
 
@@ -193,22 +193,7 @@ export const EnquirySection: React.FC = () => {
               </div>
             </div>
 
-            {/* Direct Instant Action Links */}
-            <div className="instant-actions">
-              <a href="tel:+918045683700" className="instant-contact-btn">
-                <Phone size={16} color="#48E08C" />
-                <span>Call Sales Desk: +91 80 4568 3700</span>
-              </a>
-              <a
-                href="https://wa.me/918045683700?text=Hi,%20I%20am%20interested%20in%20Kharghar%20Hills"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="instant-contact-btn"
-              >
-                <MessageSquare size={16} color="#25D366" />
-                <span>WhatsApp Instant Brochure</span>
-              </a>
-            </div>
+
           </div>
 
           {/* Right Column: White Card Form matching Page 6 */}
@@ -455,37 +440,7 @@ export const EnquirySection: React.FC = () => {
           padding-left: 0.5rem;
         }
 
-        .instant-actions {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-          max-width: 480px;
-        }
 
-        @media (min-width: 580px) {
-          .instant-actions {
-            flex-direction: row;
-          }
-        }
-
-        .instant-contact-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.16);
-          color: #FFFFFF;
-          padding: 0.65rem 1rem;
-          border-radius: var(--radius-sm);
-          font-size: 0.82rem;
-          font-weight: 600;
-          transition: all 0.25s ease;
-        }
-
-        .instant-contact-btn:hover {
-          background: rgba(255, 255, 255, 0.16);
-          border-color: #FFFFFF;
-        }
 
         /* Right Column Form Card */
         .enquiry-card {

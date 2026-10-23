@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Phone, Menu, X, ArrowUpRight } from 'lucide-react'
+import { Menu, X, ArrowUpRight } from 'lucide-react'
 import gsap from 'gsap'
 import { KhargharLogo } from './BrandIcons'
 
@@ -154,29 +154,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenModal }) => {
             })}
           </nav>
 
-          {/* Right Action Buttons */}
+          {/* Right Action Button */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <a
-              href="tel:+918045683700"
-              style={{
-                display: 'none',
-                alignItems: 'center',
-                gap: '0.45rem',
-                fontFamily: 'var(--font-heading)',
-                fontSize: '0.84rem',
-                fontWeight: 600,
-                color: '#103323',
-                padding: '0.45rem 0.85rem',
-                borderRadius: 'var(--radius-sm)',
-                backgroundColor: 'rgba(16, 51, 35, 0.05)',
-                transition: 'all 0.25s ease',
-              }}
-              className="desktop-phone-btn"
-              title="Call Sales Team"
-            >
-              <Phone size={14} color="#103323" />
-              <span>+91 80 4568 3700</span>
-            </a>
 
             <button
               type="button"
@@ -264,24 +243,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenModal }) => {
             className="mobile-nav-item"
             style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}
           >
-            <a
-              href="tel:+918045683700"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.55rem',
-                padding: '0.9rem',
-                backgroundColor: 'rgba(16, 51, 35, 0.08)',
-                color: '#103323',
-                fontWeight: 600,
-                borderRadius: 'var(--radius-sm)',
-                transition: 'background-color 0.2s ease',
-              }}
-            >
-              <Phone size={18} />
-              <span>Call: +91 80 4568 3700</span>
-            </a>
 
             <button
               type="button"
